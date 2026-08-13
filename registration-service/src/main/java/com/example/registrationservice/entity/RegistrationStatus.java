@@ -1,4 +1,6 @@
 package com.example.registrationservice.entity;
 
-public class RegistrationStatus {
+public enum RegistrationStatus {
+    REGISTERED,
+    CANCELLED
 }
