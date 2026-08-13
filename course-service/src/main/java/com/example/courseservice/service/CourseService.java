@@ -6,6 +6,8 @@ import com.example.courseservice.repository.CourseRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +23,22 @@ public class CourseService {
     private final CourseRepository courseRepository;
 
     public List<CourseDTO> getAll() {
-
         return courseRepository.findAll()
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<CourseDTO> search(String keyword, Pageable pageable) {
+
+        Page<Course> page = (keyword == null || keyword.isBlank())
+                ? courseRepository.findAll(pageable)
+                : courseRepository.findByTenMonHocContainingIgnoreCase(
+                keyword,
+                pageable
+        );
+
+        return page.map(this::toDTO);
     }
 
     public CourseDTO getById(Long id) {
@@ -40,12 +53,59 @@ public class CourseService {
         return toDTO(course);
     }
 
+    public CourseDTO reserveSeat(Long id) {
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() ->
+                        new NoSuchElementException(
+                                "Khong tim thay mon hoc id = " + id
+                        )
+                );
+
+        if (course.getSoChoConLai() <= 0) {
+            throw new IllegalStateException(
+                    "Mon hoc da het cho, khong the dang ky"
+            );
+        }
+
+        course.setSoChoConLai(
+                course.getSoChoConLai() - 1
+        );
+
+        return toDTO(
+                courseRepository.save(course)
+        );
+    }
+
+    public CourseDTO releaseSeat(Long id) {
+
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() ->
+                        new NoSuchElementException(
+                                "Khong tim thay mon hoc id = " + id
+                        )
+                );
+
+        if (course.getSoChoConLai() >= course.getSoChoToiDa()) {
+            throw new IllegalStateException(
+                    "So cho con lai da dat toi da"
+            );
+        }
+
+        course.setSoChoConLai(
+                course.getSoChoConLai() + 1
+        );
+
+        return toDTO(
+                courseRepository.save(course)
+        );
+    }
+
     public CourseDTO create(CourseDTO dto) {
 
         if (courseRepository.existsByTenMonHocIgnoreCase(
                 dto.getTenMonHoc()
         )) {
-
             throw new IllegalArgumentException(
                     "Ten mon hoc da ton tai"
             );
@@ -56,9 +116,6 @@ public class CourseService {
         course.setTenMonHoc(dto.getTenMonHoc());
         course.setSoTinChi(dto.getSoTinChi());
         course.setSoChoToiDa(dto.getSoChoToiDa());
-
-        // Khi tao moi:
-        // soChoConLai = soChoToiDa
         course.setSoChoConLai(dto.getSoChoToiDa());
 
         return toDTO(
@@ -75,21 +132,35 @@ public class CourseService {
                         )
                 );
 
-        if (courseRepository.existsByTenMonHocIgnoreCaseAndIdNot(dto.getTenMonHoc(), id)) {
-            throw new IllegalArgumentException("Ten mon hoc da ton tai");
+        if (courseRepository.existsByTenMonHocIgnoreCaseAndIdNot(
+                dto.getTenMonHoc(),
+                id
+        )) {
+            throw new IllegalArgumentException(
+                    "Ten mon hoc da ton tai"
+            );
         }
 
-        int enrolled = course.getSoChoToiDa() - course.getSoChoConLai();
+        int enrolled =
+                course.getSoChoToiDa()
+                        - course.getSoChoConLai();
+
         if (dto.getSoChoToiDa() < enrolled) {
             throw new IllegalArgumentException(
-                    "So cho toi da moi khong duoc nho hon so cho da dang ky (" + enrolled + ")"
+                    "So cho toi da moi khong duoc nho hon "
+                            + "so cho da dang ky ("
+                            + enrolled
+                            + ")"
             );
         }
 
         course.setTenMonHoc(dto.getTenMonHoc());
         course.setSoTinChi(dto.getSoTinChi());
         course.setSoChoToiDa(dto.getSoChoToiDa());
-        course.setSoChoConLai(dto.getSoChoToiDa() - enrolled);
+
+        course.setSoChoConLai(
+                dto.getSoChoToiDa() - enrolled
+        );
 
         return toDTO(
                 courseRepository.save(course)
@@ -106,7 +177,9 @@ public class CourseService {
                 );
 
         if (course.getSoChoConLai() < course.getSoChoToiDa()) {
-            throw new IllegalArgumentException("Khong the xoa mon hoc da co sinh vien dang ky");
+            throw new IllegalArgumentException(
+                    "Khong the xoa mon hoc da co sinh vien dang ky"
+            );
         }
 
         courseRepository.deleteById(id);

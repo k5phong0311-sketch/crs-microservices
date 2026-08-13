@@ -1,12 +1,7 @@
-
 package com.example.courseservice.entity;
 
 import jakarta.persistence.*;
-<<<<<<< HEAD
-        import lombok.AllArgsConstructor;
-=======
 import lombok.AllArgsConstructor;
->>>>>>> 3350210 (feat(course-service): CRUD course 3-layer + DTO)
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -32,10 +27,7 @@ public class Course {
 
     @Column(name = "so_cho_con_lai", nullable = false)
     private Integer soChoConLai;
-<<<<<<< HEAD
-=======
 
     @Version
     private Long version;
->>>>>>> 3350210 (feat(course-service): CRUD course 3-layer + DTO)
 }
