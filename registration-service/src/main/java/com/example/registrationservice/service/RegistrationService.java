@@ -120,4 +120,8 @@ public class RegistrationService {
                 registration.getCreatedAt()
         );
     }
+
+    public List<Registration> getMyRegistrations(Long studentId) {
+        return registrationRepository.findByStudentId(studentId);
+    }
 }

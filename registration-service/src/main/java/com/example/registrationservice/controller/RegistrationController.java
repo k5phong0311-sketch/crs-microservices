@@ -2,6 +2,8 @@ package com.example.registrationservice.controller;
 
 import com.example.registrationservice.dto.RegistrationDTO;
 import com.example.registrationservice.service.RegistrationService;
+import org.springframework.security.core.Authentication;
+import com.example.registrationservice.entity.Registration;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,5 +54,11 @@ public class RegistrationController {
         return ResponseEntity.ok(
                 registrationService.cancel(id)
         );
+    }
+
+    @GetMapping("/my")
+    public List<Registration> getMyRegistrations(Authentication authentication) {
+        Long studentId = (Long) authentication.getCredentials();
+        return registrationService.getMyRegistrations(studentId);
     }
 }
