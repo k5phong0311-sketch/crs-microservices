@@ -25,7 +25,7 @@ export default function MyRegistrationsPage() {
     setLoadError(null);
     try {
       const res = await getMyRegistrations();
-      const activeRegistrations = res.data.filter((r) => r.trangThai === 'DA_DANG_KY');
+      const activeRegistrations = res.data.filter((r) => r.status === 'REGISTERED');
 
       // Ghep ten mon hoc cho tung dong - goi song song bang Promise.all cho nhanh
       const enriched = await Promise.all(
@@ -96,7 +96,7 @@ export default function MyRegistrationsPage() {
             {rows.map((row) => (
               <tr key={row.id} style={{ borderBottom: '1px solid #eee' }}>
                 <td>{row.courseName}</td>
-                <td>{new Date(row.ngayDangKy).toLocaleString('vi-VN')}</td>
+                <td>{new Date(row.createdAt).toLocaleString('vi-VN')}</td>
                 <td>
                   <button
                     onClick={() => handleCancel(row)}

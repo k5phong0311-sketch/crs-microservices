@@ -2,8 +2,8 @@ export interface Registration {
   id: number;
   studentId: number;
   courseId: number;
-  trangThai: 'DA_DANG_KY' | 'DA_HUY';
-  ngayDangKy: string; 
+  status: 'REGISTERED' | 'CANCELLED';
+  createdAt: string; 
 }
 
 export interface RegistrationRequest {
