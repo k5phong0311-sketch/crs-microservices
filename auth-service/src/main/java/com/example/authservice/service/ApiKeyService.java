@@ -52,7 +52,7 @@ public class ApiKeyService {
         return apiKeyRepository.findByKeyValue(keyValue)
                 .filter(k -> ACTIVE.equals(k.getStatus()))
                 .filter(k -> k.getExpiresAt() == null || k.getExpiresAt().isAfter(LocalDateTime.now()))
-                .filter(k -> List.of(k.getScopes().split(",")).contains(requiredScope))
+                .filter(k -> java.util.Arrays.asList(k.getScopes().split(",")).contains(requiredScope))
                 .isPresent();
     }
 

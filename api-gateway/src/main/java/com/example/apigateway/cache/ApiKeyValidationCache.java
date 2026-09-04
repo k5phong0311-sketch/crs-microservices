@@ -9,16 +9,24 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ApiKeyValidationCache {
     private static final long TTL_SECONDS = 30;
 
-    private record CacheEntry(boolean valid, Instant expiresAt) {}
+    private static class CacheEntry {
+        final boolean valid;
+        final Instant expiresAt;
+
+        CacheEntry(boolean valid, Instant expiresAt) {
+            this.valid = valid;
+            this.expiresAt = expiresAt;
+        }
+    }
 
     private final ConcurrentHashMap<String, CacheEntry> cache = new ConcurrentHashMap<>();
 
     public Boolean get(String cacheKey) {
         CacheEntry entry = cache.get(cacheKey);
-        if (entry == null || Instant.now().isAfter(entry.expiresAt())) {
+        if (entry == null || Instant.now().isAfter(entry.expiresAt)) {
             return null; // khong co trong cache hoac da het han
         }
-        return entry.valid();
+        return entry.valid;
     }
 
     public void put(String cacheKey, boolean valid) {
