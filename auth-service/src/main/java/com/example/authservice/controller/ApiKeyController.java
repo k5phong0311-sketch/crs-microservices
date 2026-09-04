@@ -1,8 +1,8 @@
-package vn.edu.crs.authservice.controller;
+package com.example.authservice.controller;
 
-import vn.edu.crs.authservice.dto.ApiKeyCreateRequestDTO;
-import vn.edu.crs.authservice.dto.ApiKeyResponseDTO;
-import vn.edu.crs.authservice.service.ApiKeyService;
+import com.example.authservice.dto.ApiKeyCreateRequestDTO;
+import com.example.authservice.dto.ApiKeyResponseDTO;
+import com.example.authservice.service.ApiKeyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

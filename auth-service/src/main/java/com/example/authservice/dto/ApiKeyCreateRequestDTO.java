@@ -1,4 +1,4 @@
-package vn.edu.crs.authservice.dto;
+package com.example.authservice.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

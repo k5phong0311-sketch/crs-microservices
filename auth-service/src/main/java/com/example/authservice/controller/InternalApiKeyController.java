@@ -1,6 +1,6 @@
-package vn.edu.crs.authservice.controller;
+package com.example.authservice.controller;
 
-import vn.edu.crs.authservice.service.ApiKeyService;
+import com.example.authservice.service.ApiKeyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;

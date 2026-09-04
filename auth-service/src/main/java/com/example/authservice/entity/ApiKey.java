@@ -1,4 +1,4 @@
-package vn.edu.crs.authservice.entity;
+package com.example.authservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiKey {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,10 +28,10 @@ public class ApiKey {
     private String scopes;
 
     @Column(nullable = false, length = 20)
-    private String status;
+    private String status; // "ACTIVE" hoac "REVOKED"
 
     @Column(name = "expires_at")
-    private LocalDateTime expiresAt;
+    private LocalDateTime expiresAt; // null = khong gioi han
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

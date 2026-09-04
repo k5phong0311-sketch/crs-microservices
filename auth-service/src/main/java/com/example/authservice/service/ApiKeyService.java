@@ -1,9 +1,9 @@
-package vn.edu.crs.authservice.service;
+package com.example.authservice.service;
 
-import vn.edu.crs.authservice.dto.ApiKeyCreateRequestDTO;
-import vn.edu.crs.authservice.dto.ApiKeyResponseDTO;
-import vn.edu.crs.authservice.entity.ApiKey;
-import vn.edu.crs.authservice.repository.ApiKeyRepository;
+import com.example.authservice.dto.ApiKeyCreateRequestDTO;
+import com.example.authservice.dto.ApiKeyResponseDTO;
+import com.example.authservice.entity.ApiKey;
+import com.example.authservice.repository.ApiKeyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +31,8 @@ public class ApiKeyService {
         apiKey.setStatus(ACTIVE);
         apiKey.setCreatedAt(LocalDateTime.now());
         apiKey.setExpiresAt(
-                dto.getValidDays() != null ? 
-LocalDateTime.now().plusDays(dto.getValidDays()) : null
+                dto.getValidDays() != null ?
+                        LocalDateTime.now().plusDays(dto.getValidDays()) : null
         );
         return toDTO(apiKeyRepository.save(apiKey));
     }
