@@ -15,6 +15,7 @@ public class InternalApiKeyController {
     public Map<String, Object> validate(
             @RequestParam String key,
             @RequestParam String scope) {
+        System.out.println("==========> AUTH-SERVICE DA BI GOI DE XAC THUC KEY: " + key + " <==========");
         boolean valid = apiKeyService.isValidForScope(key, scope);
         return Map.of("valid", valid);
     }
